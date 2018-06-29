@@ -114,19 +114,18 @@ public class RNPushNotificationListenerService extends FirebaseMessagingService 
         bundle.putBoolean("foreground", isForeground);  
         jsDelivery.notifyNotification(bundle);
 
-        // If contentAvailable is set to true, then send out a remote fetch event
-        if (bundle.getString("contentAvailable", "false").equalsIgnoreCase("true")) {
-            jsDelivery.notifyRemoteFetch(bundle);
-        }
-
         Log.v(LOG_TAG, "sendNotification: " + bundle);
 
         String message = bundle.getString("message");
-        if ((message != null && !message.isEmpty()) || !bundle.containsKey("content-available")) {
-            Application applicationContext = (Application) context.getApplicationContext();
-            RNPushNotificationHelper pushNotificationHelper = new RNPushNotificationHelper(applicationContext);
-            pushNotificationHelper.sendToNotificationCentre(bundle);
+        // If contentAvailable is set to true, then send out a remote fetch event
+        if (bundle.getString("contentAvailable", "false").equalsIgnoreCase("true")) {
+            jsDelivery.notifyRemoteFetch(bundle);
+            if ((message != null && !message.isEmpty())) return;
         }
+        
+        Application applicationContext = (Application) context.getApplicationContext();
+        RNPushNotificationHelper pushNotificationHelper = new RNPushNotificationHelper(applicationContext);
+        pushNotificationHelper.sendToNotificationCentre(bundle);
     }
 
     private boolean isApplicationInForeground() {
