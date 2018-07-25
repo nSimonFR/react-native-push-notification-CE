@@ -3,6 +3,7 @@ package com.dieam.reactnativepushnotification.modules;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.app.Notification;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -10,6 +11,12 @@ import com.google.android.gms.iid.InstanceID;
 import static com.dieam.reactnativepushnotification.modules.RNPushNotification.LOG_TAG;
 
 public class RNPushNotificationRegistrationService extends IntentService {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        startForeground(1, new Notification());
+    }
 
     private static final String TAG = "RNPushNotification";
 
